@@ -43,3 +43,35 @@ resource "azuread_invitation" "guest" {
 
   user_type = "Guest"
 }
+
+data "azuread_client_config" "current" {}
+
+resource "azuread_group" "it_lab_administrators" {
+  display_name         = "IT Lab Administrators"
+  description          = "Administrators that manage the IT lab"
+  security_enabled     = true
+  mail_enabled         = false
+  assignable_to_role   = false
+  
+  owners = [data.azuread_client_config.current.object_id]
+
+  mail_nickname = "it-lab-administrators"
+  
+  lifecycle {
+    prevent_destroy = false
+  }
+}
+
+resource "azuread_group_member" "az104_user1_member" {
+  group_object_id  = azuread_group.it_lab_administrators.object_id
+  member_object_id = azuread_user.internal.object_id
+  
+  depends_on = [azuread_user.internal]
+}
+
+resource "azuread_group_member" "guest_user_member" {
+  group_object_id  = azuread_group.it_lab_administrators.object_id
+  member_object_id = azuread_invitation.guest.user_id
+  
+  depends_on = [azuread_invitation.guest]
+}

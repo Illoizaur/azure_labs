@@ -43,3 +43,4 @@ arm*.tfvars
 *.bak
 .DS_Store
 Thumbs.db
+*.odt
