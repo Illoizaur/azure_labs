@@ -13,65 +13,25 @@ terraform {
 
 provider "azuread" {}
 
-resource "random_password" "internal_user" {
-  length  = 16
-  special = true
+module "internal_user" {
+  source         = "./modules/user_internal"
+  internal_alias = var.internal_alias
+  tenant_domain  = var.tenant_domain
 }
 
-resource "azuread_user" "internal" {
-  user_principal_name = "${var.internal_alias}@${var.tenant_domain}"
-  display_name        = var.internal_alias
-  mail_nickname       = var.internal_alias
-
-  account_enabled = true
-  password        = random_password.internal_user.result
-  force_password_change = true
-
-  job_title      = "IT Lab Administrator"
-  department     = "IT"
-  usage_location = "US"
+module "guest_user" {
+  source        = "./modules/user_guest"
+  external_email = var.external_email
+  external_name  = var.external_name
 }
 
-resource "azuread_invitation" "guest" {
-  user_email_address         = var.external_email
-  user_display_name  = var.external_name
-  redirect_url        = "https://portal.azure.com"
-
-  message {
-    body = "Welcome to Azure and our group project"
-  }
-
-  user_type = "Guest"
+module "it_group" {
+  source = "./modules/group"
 }
 
-data "azuread_client_config" "current" {}
-
-resource "azuread_group" "it_lab_administrators" {
-  display_name         = "IT Lab Administrators"
-  description          = "Administrators that manage the IT lab"
-  security_enabled     = true
-  mail_enabled         = false
-  assignable_to_role   = false
-  
-  owners = [data.azuread_client_config.current.object_id]
-
-  mail_nickname = "it-lab-administrators"
-  
-  lifecycle {
-    prevent_destroy = false
-  }
-}
-
-resource "azuread_group_member" "az104_user1_member" {
-  group_object_id  = azuread_group.it_lab_administrators.object_id
-  member_object_id = azuread_user.internal.object_id
-  
-  depends_on = [azuread_user.internal]
-}
-
-resource "azuread_group_member" "guest_user_member" {
-  group_object_id  = azuread_group.it_lab_administrators.object_id
-  member_object_id = azuread_invitation.guest.user_id
-  
-  depends_on = [azuread_invitation.guest]
+module "group_membership" {
+  source          = "./modules/group_membership"
+  group_id        = module.it_group.group_id
+  internal_user_id = module.internal_user.internal_user_id
+  guest_user_id    = module.guest_user.guest_user_id
 }
