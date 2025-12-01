@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemple.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "disks_az104_disk1_name": {
+      "type": "String"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2025-01-02",
+      "location": "eastus",
+      "name": "[parameters('disks_az104_disk1_name')]",
+      "properties": {
+        "creationData": {
+          "createOption": "Empty"
+        },
+        "diskIOPSReadWrite": 500,
+        "diskMBpsReadWrite": 60,
+        "diskSizeGB": 32,
+        "encryption": {
+          "type": "EncryptionAtRestWithPlatformKey"
+        },
+        "networkAccessPolicy": "AllowAll",
+        "optimizedForFrequentAttach": false,
+        "publicNetworkAccess": "Enabled"
+      },
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "tags": {
+        "environment": "lab",
+        "task": "task1"
+      },
+      "type": "Microsoft.Compute/disks"
+    }
+  ],
+  "variables": {}
+}

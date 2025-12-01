@@ -1,0 +1,58 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "disk_name": {
+      "type": "string",
+      "defaultValue": "az104-disk4"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus"
+    },
+    "diskSizeGB": {
+      "type": "int",
+      "defaultValue": 32
+    },
+    "diskSku": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "StandardSSD_LRS",
+        "Premium_LRS"
+      ]
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/disks",
+      "apiVersion": "2023-10-02",
+      "name": "[parameters('disk_name')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('diskSku')]"
+      },
+      "properties": {
+        "creationData": {
+          "createOption": "Empty"
+        },
+        "diskSizeGB": "[parameters('diskSizeGB')]"
+      },
+      "tags": {
+        "environment": "lab",
+        "task": "task4"
+      }
+    }
+  ],
+  "outputs": {
+    "diskId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Compute/disks', parameters('disk_name'))]"
+    },
+    "diskName": {
+      "type": "string",
+      "value": "[parameters('disk_name')]"
+    }
+  }
+}

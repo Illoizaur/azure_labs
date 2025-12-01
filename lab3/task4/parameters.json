@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "disk_name": {
+      "value": "az104-disk4"
+    },
+    "location": {
+      "value": "eastus"
+    },
+    "diskSizeGB": {
+      "value": 32
+    },
+    "diskSku": {
+      "value": "Standard_LRS"
+    }
+  }
+}

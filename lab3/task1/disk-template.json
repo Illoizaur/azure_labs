@@ -1,0 +1,32 @@
+{
+  "creationData": {
+    "createOption": "Empty"
+  },
+  "diskIOPSReadWrite": 500,
+  "diskMBpsReadWrite": 60,
+  "diskSizeBytes": 34359738368,
+  "diskSizeGB": 32,
+  "diskState": "Unattached",
+  "encryption": {
+    "type": "EncryptionAtRestWithPlatformKey"
+  },
+  "id": "/subscriptions/16763438-d8c0-4e82-b6b9-1c54738e6db3/resourceGroups/az104-rg3/providers/Microsoft.Compute/disks/az104-disk1",
+  "location": "eastus",
+  "name": "az104-disk1",
+  "networkAccessPolicy": "AllowAll",
+  "optimizedForFrequentAttach": false,
+  "provisioningState": "Succeeded",
+  "publicNetworkAccess": "Enabled",
+  "resourceGroup": "az104-rg3",
+  "sku": {
+    "name": "Standard_LRS",
+    "tier": "Standard"
+  },
+  "tags": {
+    "environment": "lab",
+    "task": "task1"
+  },
+  "timeCreated": "2025-11-25T17:11:44.1983519+00:00",
+  "type": "Microsoft.Compute/disks",
+  "uniqueId": "abd7b8c6-7a5c-4028-af4a-25b42de479d7"
+}
